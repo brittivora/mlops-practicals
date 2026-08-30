@@ -10,6 +10,7 @@ phases:
   build:
     commands:
       - python train.py
+      - aws s3 cp model.pkl s3://telecom-mlops-model-storage/model.pkl
 
 artifacts:
   files:

@@ -29,7 +29,7 @@ random_state=42
 
 print("Training Model...")
 model=RandomForestClassifier(
-n_estimators=200,
+n_estimators=100,
 random_state=42
 )
 model.fit(X_train,y_train)

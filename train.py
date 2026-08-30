@@ -12,7 +12,7 @@ from sklearn.ensemble import RandomForestClassifier
 import joblib
 import json
 
-df = pd.read_csv(r"C:\Users\britt\Downloads\Telecom_Tower_Failure_Dataset_10000-1 (1).csv")
+df = pd.read_csv("data/Telecom_Tower_Failure_Dataset_10000-1 (1).csv")
 df
 
 X = df.drop(columns=['Failure_Within_48Hrs','Tower_ID'])

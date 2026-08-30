@@ -13,4 +13,4 @@ phases:
 
 artifacts:
   files:
-    - model.pkl
+    - telecom_tower_model.pkl

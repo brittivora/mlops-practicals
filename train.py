@@ -1,42 +1,48 @@
-# Generated from: MLOPS.ipynb
-# Converted at: 2026-07-13T05:13:07.549Z
-# Next step (optional): refactor into modules & generate tests with RunCell
-# Quick start: pip install runcell
-
-import pandas as pd
-import numpy as np
-
-import pandas as pd
+import yaml
+import joblib
+from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-import joblib
-import json
+from sklearn.metrics import accuracy_score
 
-df = pd.read_csv("data/Telecom_Tower_Failure_Dataset_10000-1 (1).csv")
-df
+# Step 1: Load YAML configuration
+with open("config.yaml", "r") as file:
+    config = yaml.safe_load(file)
 
-X = df.drop(columns=['Failure_Within_48Hrs','Tower_ID'])
+print("Project:", config["project_name"])
 
-X
+# Step 2: Load the dataset
+data = load_breast_cancer()
+X = data.data
+y = data.target
 
-y = df['Failure_Within_48Hrs']
-X_train,X_test,y_train,y_test = train_test_split(
-X,
-y,
-test_size=0.25,
-random_state=42
+# Step 3: Split data using YAML settings
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=config["training"]["test_size"],
+    random_state=config["model"]["random_state"]
 )
 
-print("Training Model...")
-model=RandomForestClassifier(
-n_estimators=150,
-random_state=42
+# Step 4: Create model using YAML parameters
+model = RandomForestClassifier(
+    n_estimators=config["model"]["n_estimators"],
+    max_depth=config["model"]["max_depth"],
+    random_state=config["model"]["random_state"]
 )
-model.fit(X_train,y_train)
-accuracy=model.score(X_test,y_test)
-print("Accuracy :",accuracy)
-joblib.dump(model,"telecom_tower_model.pkl")
-metrics={"accuracy":accuracy}
-with open("metrics.json","w") as f:
-    json.dump(metrics,f,indent=4)
-print("Training Completed Successfully")
+
+# Step 5: Train the model
+model.fit(X_train, y_train)
+
+# Step 6: Evaluate the model
+predictions = model.predict(X_test)
+accuracy = accuracy_score(y_test, predictions)
+
+print("Algorithm:", config["model"]["algorithm"])
+print("Number of trees:", config["model"]["n_estimators"])
+print("Test data proportion:", config["training"]["test_size"])
+print("Model Accuracy:", round(accuracy * 100, 2), "%")
+
+# Step 7: Save the trained model
+joblib.dump(model, "model.pkl")
+print("Model saved successfully as model.pkl")

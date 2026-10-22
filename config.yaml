@@ -1,0 +1,13 @@
+# Project settings
+project_name: YAML_MLOPS_Practical
+
+# Model hyperparameters
+model:
+  algorithm: RandomForest
+  n_estimators: 100
+  max_depth: 5
+  random_state: 42
+
+# Training settings
+training:
+  test_size: 0.2
